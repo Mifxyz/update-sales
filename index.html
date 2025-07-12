@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAWA STORE - Pembayaran</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .payment-methods {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .payment-method {
+            margin-bottom: 25px;
+        }
+        
+        .payment-method h2 {
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+        
+        .dana-box {
+            background-color: #00a0e0;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .dana-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .copy-btn {
+            background-color: white;
+            color: #00a0e0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: #eee;
+        }
+        
+        .qris-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .qris-image {
+            max-width: 100%;
+            border-radius: 10px;
+            border: 3px solid white;
+        }
+        
+        .instructions {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .instructions h2 {
+            margin-bottom: 15px;
+            color: #ffcc00;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Animasi Meteor */
+        .meteor {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1),
+                        0 0 0 8px rgba(255, 255, 255, 0.1),
+                        0 0 20px rgba(255, 255, 255, 1);
+            animation: animate 3s linear infinite;
+            z-index: 1;
+        }
+        
+        .meteor:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+            height: 1px;
+            background: linear-gradient(90deg, #fff, transparent);
+        }
+        
+        @keyframes animate {
+            0% {
+                transform: rotate(215deg) translateX(0);
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(215deg) translateX(-1000px);
+                opacity: 0;
+            }
+        }
+        
+        /* Animasi Salju */
+        .snow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .snowflake {
+            position: absolute;
+            color: #fff;
+            font-size: 1rem;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animasi Meteor -->
+    <div id="meteors"></div>
+    
+    <!-- Animasi Salju -->
+    <div class="snow" id="snow"></div>
+    
+    <div class="container">
+        <header>
+            <h1>WAWA STORE</h1>
+            <p>Silakan lakukan pembayaran melalui metode di bawah ini</p>
+        </header>
+        
+        <div class="payment-methods">
+            <div class="payment-method">
+                <h2>Transfer via DANA</h2>
+                <div class="dana-box">
+                    <span class="dana-number">085642187967</span>
+                    <button class="copy-btn" onclick="copyToClipboard('085642187967')">Salin Nomor</button>
+                </div>
+            </div>
+            
+            <div class="payment-method">
+                <h2>QRIS (All Payment)</h2>
+                <div class="qris-container">
+                    <img src="https://photos.app.goo.gl/8ATipz7XfYuh58Y27" alt="QR Code WAWA STORE" class="qris-image">
+                    <p>Scan QR code di atas untuk pembayaran</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2>Cara Pembayaran:</h2>
+            <ol>
+                <li>Pilih metode pembayaran (DANA atau QRIS)</li>
+                <li>Untuk DANA: Salin nomor dan transfer sesuai jumlah</li>
+                <li>Untuk QRIS: Scan QR code dan ikuti instruksi</li>
+                <li>Setelah membayar, kirim bukti transfer ke admin</li>
+                <li>Tunggu konfirmasi dari admin WAWA STORE</li>
+            </ol>
+        </div>
+        
+        <footer>
+            <p>© 2023 WAWA STORE. Semua hak dilindungi.</p>
+            <p>Terima kasih telah berbelanja di WAWA STORE</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Fungsi untuk menyalin teks
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Nomor DANA berhasil disalin: ' + text);
+            }).catch(err => {
+                console.error('Gagal menyalin teks: ', err);
+            });
+        }
+        
+        // Membuat meteor
+        function createMeteors() {
+            const meteorsContainer = document.getElementById('meteors');
+            const meteorCount = 5;
+            
+            for (let i = 0; i < meteorCount; i++) {
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                
+                // Posisi acak
+                meteor.style.left = Math.random() * 100 + 'vw';
+                meteor.style.top = Math.random() * 100 + 'vh';
+                
+                // Delay animasi acak
+                meteor.style.animationDelay = Math.random() * 3 + 's';
+                meteor.style.animationDuration = 2 + Math.random() * 3 + 's';
+                
+                meteorsContainer.appendChild(meteor);
+            }
+        }
+        
+        // Membuat salju
+        function createSnow() {
+            const snowContainer = document.getElementById('snow');
+            const snowflakeCount = 50;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '❄';
+                
+                // Posisi acak
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.top = -20 + 'px';
+                
+                // Ukuran acak
+                const size = Math.random() * 0.8 + 0.4;
+                snowflake.style.fontSize = size + 'rem';
+                snowflake.style.opacity = size;
+                
+                // Kecepatan jatuh acak
+                const duration = Math.random() * 5 + 5;
+                snowflake.style.animationDuration = duration + 's';
+                
+                // Delay acak
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                
+                snowContainer.appendChild(snowflake);
+            }
+        }
+        
+        // Jalankan saat halaman dimuat
+        window.onload = function() {
+            createMeteors();
+            createSnow();
+        };
+    </script>
+</body>
+</html>
