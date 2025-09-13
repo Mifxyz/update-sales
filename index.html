@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erafone Cisoka Sales Update - V7 Final</title>
+    <title>Erafone Cisoka Sales Update - Google Sheets</title>
     <style>
         :root {
             --primary-color: #00ffff;
@@ -161,17 +161,21 @@
             box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color), 0 0 15px var(--primary-color);
             transition: all 0.3s ease;
         }
+        .neon-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
 
-        .neon-button:hover {
+        .neon-button:hover:not(:disabled) {
             color: var(--background-color);
             background-color: var(--primary-color);
             box-shadow: 0 0 15px var(--primary-color), 0 0 25px var(--primary-color), 0 0 40px var(--primary-color);
         }
         
         #save-button { color: #00ff00; border-color: #00ff00; box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; }
-        #save-button:hover { background-color: #00ff00; color: var(--background-color); box-shadow: 0 0 15px #00ff00, 0 0 25px #00ff00; }
+        #save-button:hover:not(:disabled) { background-color: #00ff00; color: var(--background-color); box-shadow: 0 0 15px #00ff00, 0 0 25px #00ff00; }
         #reset-button { color: #ff0000; border-color: #ff0000; box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000; }
-        #reset-button:hover { background-color: #ff0000; color: var(--background-color); box-shadow: 0 0 15px #ff0000, 0 0 25px #ff0000; }
+        #reset-button:hover:not(:disabled) { background-color: #ff0000; color: var(--background-color); box-shadow: 0 0 15px #ff0000, 0 0 25px #ff0000; }
 
         .output-container { margin-top: 30px; text-align: left; }
         #output {
@@ -238,9 +242,9 @@
             </div>
 
             <div class="button-container">
-                <button class="neon-button" id="save-button">Simpan Data</button>
-                <button class="neon-button" id="load-button">Muat Data</button>
-                <button class="neon-button" id="reset-button">Reset Data</button>
+                <button class="neon-button" id="save-button">Simpan Data Online</button>
+                <button class="neon-button" id="load-button">Muat Data Online</button>
+                <button class="neon-button" id="reset-button">Reset Data Online</button>
                 <button class="neon-button" id="generate-button">Generate Output</button>
                 <button class="neon-button" id="copy-button">Copy Text</button>
             </div>
@@ -256,6 +260,11 @@
     </div>
 
     <script>
+        // --- PENTING: GANTI URL DI BAWAH INI ---
+        // Ganti dengan URL Web App dari Google Apps Script yang sudah Anda deploy.
+        // Ikuti instruksi pada file README.md untuk mendapatkan URL ini.
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyRwbi_b9Eu86lQ7n_FXFvW0YY0TZT6ynl1uRZGHBGdO9tEJxkyAT2OLR4Nb33JpP1y/exec';
+
         document.addEventListener('DOMContentLoaded', () => {
             
             const accessCode = 'e627';
@@ -264,16 +273,15 @@
             
             const enteredCode = prompt('Masukkan Kode Toko untuk Lanjut:');
 
-            if (enteredCode === accessCode) {
-                appContainer.style.display = 'block';
-            } else {
+            if (enteredCode !== accessCode) {
                 accessDeniedMessage.style.display = 'block';
                 return;
             }
+            appContainer.style.display = 'block';
 
             const initialDeviceData = [
-                { name: "OPPO", qty: "", value1: ""}, { name: "VIVO", qty: "2", value1: "6098000"},
-                { name: "IQOO", qty: "", value1: ""}, { name: "SAMSUNG", qty: "3", value1: "13697000"},
+                { name: "OPPO", qty: "", value1: ""}, { name: "VIVO", qty: "", value1: ""},
+                { name: "IQOO", qty: "", value1: ""}, { name: "SAMSUNG", qty: "", value1: ""},
                 { name: "XIAOMI", qty: "", value1: ""}, { name: "APPLE", qty: "", value1: ""},
                 { name: "INFINIX", qty: "", value1: ""}, { name: "TECNO", qty: "", value1: ""},
                 { name: "REALME", qty: "", value1: ""}, { name: "ASUS", qty: "", value1: ""},
@@ -284,10 +292,10 @@
             const initialVasData = [
                 { name: "TV", qty: "", value1: ""}, { name: "LAPTOP", qty: "", value1: "" },
                 { name: "TECPROTEC", qty: "", value1: "" }, { name: "UT", qty: "", value1: "" },
-                { name: "INDOSAT", qty: "1", value1: "600000" }, { name: "PRIO", qty: "", value1: "" },
+                { name: "INDOSAT", qty: "", value1: "" }, { name: "PRIO", qty: "", value1: "" },
                 { name: "XMART", qty: "", value1: "" }, { name: "TSEL", qty: "", value1: "" },
-                { name: "SMARTFREN", qty: "", value1: "" }, { name: "ACC", qty: "6", value1: "1125000" },
-                { name: "MEDPOIN", qty: "1", value1: "150000" }, { name: "TOKEN", qty: "", value1: "" },
+                { name: "SMARTFREN", qty: "", value1: "" }, { name: "ACC", qty: "", value1: "" },
+                { name: "MEDPOIN", qty: "", value1: "" }, { name: "TOKEN", qty: "", value1: "" },
             ];
 
             const initialLeasingData = [
@@ -338,7 +346,6 @@
                                 <input type="text" class="value-input" data-field="value1">
                             </div>`;
                 
-                // --- PERUBAHAN DI SINI: Lost Store sekarang juga punya Value 2 ---
                 if (type === 'qty-value' || type === 'leasing' || type === 'lost-store') {
                     content += `<div class="input-group">
                                     <label>Value 2:</label>
@@ -380,6 +387,10 @@
             };
 
             const saveData = () => {
+                if (SCRIPT_URL === 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                    alert('Harap masukkan URL Google Apps Script Anda di dalam file HTML terlebih dahulu!');
+                    return;
+                }
                 const consolidateValues = (containerSelector) => {
                     document.querySelectorAll(`${containerSelector} .item`).forEach(item => {
                         const valueInputs = item.querySelectorAll('.value-input[data-field^="value"]');
@@ -399,7 +410,6 @@
                 consolidateValues('#device-list');
                 consolidateValues('#vas-list');
                 consolidateValues('#leasing-list');
-                // --- PERUBAHAN DI SINI: Terapkan juga konsolidasi untuk Lost Store ---
                 consolidateValues('#lost-store-list');
                 calculateTotals();
 
@@ -421,61 +431,129 @@
                     lostStore: getDataFromSection('#lost-store-list')
                 };
 
-                localStorage.setItem('salesDataV7', JSON.stringify(dataToSave));
-                alert('Data berhasil dikonsolidasi dan disimpan!');
+                const saveButton = document.getElementById('save-button');
+                saveButton.textContent = 'Menyimpan...';
+                saveButton.disabled = true;
+
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' }, // Use text/plain to avoid preflight
+                    body: JSON.stringify(dataToSave)
+                })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        alert('Data berhasil disimpan ke Google Sheets!');
+                    } else {
+                        throw new Error(result.message || 'Terjadi kesalahan saat menyimpan.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Gagal menyimpan data. Cek konsol untuk detail.\nError: ' + error.message);
+                })
+                .finally(() => {
+                    saveButton.textContent = 'Simpan Data Online';
+                    saveButton.disabled = false;
+                });
             };
 
-            const loadData = () => {
-                const savedData = localStorage.getItem('salesDataV7');
-                if (!savedData) {
-                    alert('Tidak ada data tersimpan!');
+            const loadData = (isManual = false) => {
+                if (SCRIPT_URL === 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                    if (isManual) alert('Harap masukkan URL Google Apps Script Anda di dalam file HTML terlebih dahulu!');
                     return;
                 }
-                const data = JSON.parse(savedData);
 
-                const loadSectionData = (containerSelector, sectionData) => {
-                    if (!sectionData) return;
-                    sectionData.forEach(itemData => {
-                        const itemElement = document.querySelector(`${containerSelector} .item[data-name="${itemData.name}"]`);
-                        if (itemElement) {
-                            itemElement.querySelectorAll('input').forEach(input => {
-                                const field = input.dataset.field;
-                                const value = itemData[field] || '';
-                                if (field.startsWith('value')) {
-                                    input.dataset.value = value;
-                                    input.value = formatCurrency(value);
-                                } else {
-                                    input.value = value;
-                                }
-                            });
-                        }
-                    });
-                };
+                const loadButton = document.getElementById('load-button');
+                loadButton.textContent = 'Memuat...';
+                loadButton.disabled = true;
 
-                loadSectionData('#device-list', data.devices);
-                loadSectionData('#vas-list', data.vas);
-                loadSectionData('#leasing-list', data.leasing);
-                loadSectionData('#lost-store-list', data.lostStore);
-                
-                calculateTotals();
-                alert('Data berhasil dimuat!');
+                fetch(SCRIPT_URL)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data || Object.keys(data).length === 0) {
+                        if (isManual) alert('Tidak ada data tersimpan di Google Sheets!');
+                        return;
+                    }
+                    
+                    const loadSectionData = (containerSelector, sectionData) => {
+                        if (!sectionData) return;
+                        sectionData.forEach(itemData => {
+                            const itemElement = document.querySelector(`${containerSelector} .item[data-name="${itemData.name}"]`);
+                            if (itemElement) {
+                                itemElement.querySelectorAll('input').forEach(input => {
+                                    const field = input.dataset.field;
+                                    const value = itemData[field] || '';
+                                    if (field.startsWith('value')) {
+                                        input.dataset.value = value;
+                                        input.value = formatCurrency(value);
+                                    } else {
+                                        input.value = value;
+                                    }
+                                });
+                            }
+                        });
+                    };
+
+                    loadSectionData('#device-list', data.devices);
+                    loadSectionData('#vas-list', data.vas);
+                    loadSectionData('#leasing-list', data.leasing);
+                    loadSectionData('#lost-store-list', data.lostStore);
+                    
+                    calculateTotals();
+                    if (isManual) {
+                        alert('Data berhasil dimuat dari Google Sheets!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    if (isManual) {
+                        alert('Gagal memuat data. Pastikan URL Apps Script benar dan sudah di-deploy. Cek konsol untuk detail.');
+                    }
+                })
+                .finally(() => {
+                    loadButton.textContent = 'Muat Data Online';
+                    loadButton.disabled = false;
+                });
             };
 
             const resetData = () => {
-                if (confirm('Anda yakin ingin menghapus semua data? Tindakan ini tidak dapat dibatalkan.')) {
-                    localStorage.removeItem('salesDataV7');
-                    populateContainer('device-list', initialDeviceData, 'qty-value');
-                    populateContainer('vas-list', initialVasData, 'qty-value');
-                    populateContainer('leasing-list', initialLeasingData, 'leasing');
-                    populateContainer('lost-store-list', initialLostStoreData, 'lost-store');
-                    calculateTotals();
-                    alert('Semua data berhasil direset!');
+                 if (confirm('Anda yakin ingin menghapus semua data di Google Sheets? Tindakan ini tidak dapat dibatalkan.')) {
+                    const resetButton = document.getElementById('reset-button');
+                    resetButton.textContent = 'Mereset...';
+                    resetButton.disabled = true;
+
+                    fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: JSON.stringify({}) // Send empty object to clear
+                    })
+                    .then(res => res.json())
+                    .then(result => {
+                         if (result.status === 'success') {
+                            populateContainer('device-list', initialDeviceData, 'qty-value');
+                            populateContainer('vas-list', initialVasData, 'qty-value');
+                            populateContainer('leasing-list', initialLeasingData, 'leasing');
+                            populateContainer('lost-store-list', initialLostStoreData, 'lost-store');
+                            calculateTotals();
+                            alert('Semua data di Google Sheets berhasil direset!');
+                         } else {
+                            throw new Error(result.message || 'Unknown error occurred');
+                         }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Gagal mereset data: ' + error.message);
+                    })
+                    .finally(() => {
+                        resetButton.textContent = 'Reset Data Online';
+                        resetButton.disabled = false;
+                    });
                 }
             };
             
             const generateOutputText = () => {
                 let output = `*GASSSPOL UPDATE SALES ALL TEAM ERAFONE CISOKA*\n\n*${document.getElementById('current-date').textContent}*\n\nQTY / VALUE\n\n`;
-
                 const generateSectionText = (selector) => {
                     let text = '';
                     document.querySelectorAll(`${selector} .item`).forEach(item => {
@@ -485,17 +563,12 @@
                         
                         let totalValue = 0;
                         item.querySelectorAll('.value-input').forEach(input => totalValue += getNumericValue(input));
-                        
                         const displayValue = formatCurrency(totalValue);
 
                         let line = `${name} :`;
-                        if (qty && displayValue) {
-                            line += ` ${qty} / ${displayValue}`;
-                        } else if (qty) {
-                            line += ` ${qty}`;
-                        } else if (displayValue) {
-                            line += ` ${displayValue}`;
-                        }
+                        if (qty && displayValue) line += ` ${qty} / ${displayValue}`;
+                        else if (qty) line += ` ${qty}`;
+                        else if (displayValue) line += ` ${displayValue}`;
                         text += line + '\n';
                     });
                     return text;
@@ -506,23 +579,17 @@
                 output += generateSectionText('#vas-list');
                 output += `TOTAL VAS : ${document.getElementById('total-vas-qty').textContent} / ${document.getElementById('total-vas-value').textContent}\n\n`;
                 output += `TOTAL ALL CATEGORY : ${document.getElementById('total-all-category').textContent}\n\n\n`;
-                
                 output += `*LOST STORE*\n\n${document.getElementById('lost-date').textContent}\n`;
-                // --- PERUBAHAN DI SINI: Pastikan output Lost Store menjumlahkan kedua value ---
                 document.querySelectorAll('#lost-store-list .item').forEach(item => {
                     const name = item.dataset.name;
                     const qty = item.querySelector('.qty-input').value.trim();
-                    
                     let totalValue = 0;
                     item.querySelectorAll('.value-input').forEach(input => totalValue += getNumericValue(input));
                     const displayValue = formatCurrency(totalValue);
-                    
                     output += `${name}\nQTY : ${qty}\nVALUE : ${displayValue}\n\n`;
                 });
-                
                 output += `*UPDATE SALES LEASING*\n\n`;
                 output += generateSectionText('#leasing-list');
-                
                 return output;
             };
 
@@ -561,7 +628,7 @@
             });
 
             document.getElementById('save-button').addEventListener('click', saveData);
-            document.getElementById('load-button').addEventListener('click', loadData);
+            document.getElementById('load-button').addEventListener('click', () => loadData(true));
             document.getElementById('reset-button').addEventListener('click', resetData);
             document.getElementById('generate-button').addEventListener('click', handleGenerate);
             document.getElementById('copy-button').addEventListener('click', handleCopy);
@@ -571,7 +638,8 @@
             populateContainer('vas-list', initialVasData, 'qty-value');
             populateContainer('leasing-list', initialLeasingData, 'leasing');
             populateContainer('lost-store-list', initialLostStoreData, 'lost-store');
-            calculateTotals();
+            
+            loadData(); // Automatically load data from Google Sheets on page open
         });
     </script>
 </body>
