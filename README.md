@@ -1,2 +1,4 @@
 # mau copy?
-# ijin dulu ya kak😁
+minimal ijin fulu ya ka🗿
+ig : @miifxyz
+wa : 085890585398
