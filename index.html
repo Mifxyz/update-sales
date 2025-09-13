@@ -1,73 +1,470 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WAWA STORE - Pembayaran</title>
+    <title>Erafone Cisoka Sales Update - Editable</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
+            background-color: #0d0d0d;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
         }
-        
+
+        .neon-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow:
+                0 0 7px #fff,
+                0 0 10px #fff,
+                0 0 21px #fff,
+                0 0 42px #0ff,
+                0 0 82px #0ff,
+                0 0 92px #0ff,
+                0 0 102px #0ff,
+                0 0 151px #0ff;
+            margin-bottom: 20px;
+        }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 10;
-        }
-        
-        header {
-            text-align: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .payment-methods {
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: #1a1a1a;
             border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(5px);
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
-        
-        .payment-method {
-            margin-bottom: 25px;
-        }
-        
-        .payment-method h2 {
-            margin-bottom: 15px;
-            color: #ffcc00;
-        }
-        
-        .dana-box {
-            background-color: #00a0e0;
-            padding: 15px;
+
+        .section {
+            border: 2px solid #333;
             border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .section h2 {
+            font-size: 1.5em;
+            margin-top: 0;
+            color: #00ffff;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed #444;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .label-group {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            flex: 1;
+            text-align: left;
+            padding-right: 10px;
+        }
+
+        .label-group .label {
+            color: #aaa;
+            font-size: 1em;
+            padding-right: 10px;
+            min-width: 100px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .input-group input {
+            width: 60px;
+            background-color: #333;
+            border: 1px solid #00ffff;
+            color: #fff;
+            padding: 5px;
+            text-align: right;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-left: 5px;
         }
         
-        .dana-number {
-            font-size: 1.2rem;
+        .input-group input.value-input {
+            width: 120px;
+        }
+
+        .total {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 2px solid #00ffff;
+            color: #00ffff;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ffff;
+        }
+        
+        .total-all {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #00ffff;
+            color: #0d0d0d;
+            border-radius: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-shadow: none;
+            box-shadow: 0 0 15px #00ffff;
+        }
+        
+        .button-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .neon-button {
+            padding: 10px 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #00ffff;
+            background-color: #1a1a1a;
+            border: 2px solid #00ffff;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff;
+            transition: all 0.3s ease;
+        }
+
+        .neon-button:hover {
+            color: #0d0d0d;
+            background-color: #00ffff;
+            box-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff, 0 0 40px #00ffff;
+        }
+
+        .output-container {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        #output {
+            width: 100%;
+            height: 300px;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            resize: vertical;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            display: none;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="neon-title">UPDATE SALES ALL TEAM ERAFONE CISOKA</h1>
+        <h3 id="current-date"></h3>
+
+        <div class="section">
+            <h2>QTY / VALUE</h2>
+            <div id="device-list">
+                </div>
+            <div class="total">TOTAL DEVICE: <span id="total-device-qty"></span> / <span id="total-device-value"></span></div>
+        </div>
+
+        <div class="section">
+            <div id="vas-list">
+                </div>
+            <div class="total">TOTAL VAS: <span id="total-vas-qty"></span> / <span id="total-vas-value"></span></div>
+        </div>
+
+        <div class="section total-all">
+            TOTAL ALL CATEGORY: <span id="total-all-category"></span>
+        </div>
+        
+        <div class="section">
+            <h2>LOST STORE</h2>
+            <h3 id="lost-date"></h3>
+            <div class="item">
+                <div class="label-group">
+                    <span class="label">REJECT:</span>
+                    <div class="input-group">QTY:<input type="number" id="reject-qty" value=""></div>
+                </div>
+                <div class="input-group">VALUE:<input type="number" class="value-input" id="reject-value" value=""></div>
+            </div>
+            <div class="item">
+                <div class="label-group">
+                    <span class="label">STOCK KOSONG:</span>
+                    <div class="input-group">QTY:<input type="number" id="stock-kosong-qty" value=""></div>
+                </div>
+                <div class="input-group">VALUE:<input type="number" class="value-input" id="stock-kosong-value" value=""></div>
+            </div>
+            <div class="item">
+                <div class="label-group">
+                    <span class="label">LIHAT LIHAT/LOSE:</span>
+                    <div class="input-group">QTY:<input type="number" id="lihat-qty" value=""></div>
+                </div>
+                <div class="input-group">VALUE:<input type="number" class="value-input" id="lihat-value" value=""></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>UPDATE SALES LEASING</h2>
+            <div class="item">
+                <div class="label-group">
+                    <span class="label">AKULAKU:</span>
+                </div>
+                <div class="input-group">VALUE:<input type="number" class="value-input" id="akulaku-value" value=""></div>
+            </div>
+            <div class="item">
+                <div class="label-group">
+                    <span class="label">KREDIVO:</span>
+                </div>
+                <div class="input-group">VALUE:<input type="number" class="value-input" id="kredivo-value" value=""></div>
+            </div>
+            <div class="item">
+                <div class="label-group">
+                    <span class="label">SHOPEEPAY:</span>
+                </div>
+                <div class="input-group">VALUE:<input type="number" class="value-input" id="shopeepay-value" value=""></div>
+            </div>
+            <div class="item">
+                <div class="label-group">
+                    <span class="label">INDODANA:</span>
+                </div>
+                <div class="input-group">VALUE:<input type="number" class="value-input" id="indodana-value" value=""></div>
+            </div>
+            <div class="item">
+                <div class="label-group">
+                    <span class="label">HCI:</span>
+                </div>
+                <div class="input-group">VALUE:<input type="number" class="value-input" id="hci-value" value=""></div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="neon-button" onclick="calculateAndGenerate()">Generate Output</button>
+            <button class="neon-button" onclick="copyOutput()">Copy Text</button>
+        </div>
+
+        <div class="output-container">
+            <textarea id="output" readonly></textarea>
+        </div>
+
+    </div>
+    <div class="footer">
+        Made by Mifxyz✨
+    </div>
+
+    <script>
+        const deviceData = [
+            { name: "OPPO", qty: "", value: ""},
+            { name: "VIVO", qty: "2", value: "6098000"},
+            { name: "IQOO", qty: "", value: ""},
+            { name: "SAMSUNG", qty: "3", value: "13697000"},
+            { name: "XIAOMI", qty: "", value: ""},
+            { name: "APPLE", qty: "", value: ""},
+            { name: "INFINIX", qty: "", value: ""},
+            { name: "TECNO", qty: "", value: ""},
+            { name: "REALME", qty: "", value: ""},
+            { name: "ASUS", qty: "", value: ""},
+            { name: "NOKIA", qty: "", value: ""},
+            { name: "HONOR", qty: "", value: ""},
+            { name: "HUAWEI", qty: "", value: ""},
+        ];
+        
+        const vasData = [
+            { name: "TV", qty: "", value: ""},
+            { name: "LAPTOP", qty: "", value: "" },
+            { name: "TECPROTEC", qty: "", value: "" },
+            { name: "UT", qty: "", value: "" },
+            { name: "INDOSAT", qty: "1", value: "600000" },
+            { name: "PRIO", qty: "", value: "" },
+            { name: "XMART", qty: "", value: "" },
+            { name: "TSEL", qty: "", value: "" },
+            { name: "SMARTFREN", qty: "", value: "" },
+            { name: "ACC", qty: "6", value: "1125000" },
+            { name: "MEDPOIN", qty: "1", value: "150000" },
+            { name: "TOKEN", qty: "", value: "" },
+        ];
+
+        function updateDate() {
+            const today = new Date();
+            const day = today.getDate();
+            const month = today.getMonth() + 1;
+            const year = today.getFullYear();
+            const monthNames = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
+            const formattedDate = `${day} ${monthNames[today.getMonth()]} ${year}`;
+            
+            document.getElementById('current-date').textContent = formattedDate;
+            document.getElementById('lost-date').textContent = `LOSE TGL ${day}/${month < 10 ? '0' + month : month}/${year}`;
+        }
+
+        function createInputFields(data, containerId) {
+            const container = document.getElementById(containerId);
+            data.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item';
+                itemDiv.innerHTML = `
+                    <div class="label-group">
+                        <span class="label">${item.name}:</span>
+                        <div class="input-group">
+                            QTY:<input type="number" class="qty-input" value="${item.qty}">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        VALUE:<input type="number" class="value-input" value="${item.value}">
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function formatCurrency(value) {
+            if (!value || value === 0) return '';
+            return new Intl.NumberFormat('id-ID').format(value);
+        }
+
+        function calculateTotals() {
+            let totalDeviceQty = 0;
+            let totalDeviceValue = 0;
+            document.querySelectorAll('#device-list .item').forEach(item => {
+                const qty = parseInt(item.querySelector('.qty-input').value) || 0;
+                const value = parseInt(item.querySelector('.value-input').value) || 0;
+                totalDeviceQty += qty;
+                totalDeviceValue += value;
+            });
+            document.getElementById('total-device-qty').textContent = totalDeviceQty;
+            document.getElementById('total-device-value').textContent = formatCurrency(totalDeviceValue);
+            
+            let totalVasQty = 0;
+            let totalVasValue = 0;
+            document.querySelectorAll('#vas-list .item').forEach(item => {
+                const qty = parseInt(item.querySelector('.qty-input').value) || 0;
+                const value = parseInt(item.querySelector('.value-input').value) || 0;
+                totalVasQty += qty;
+                totalVasValue += value;
+            });
+            document.getElementById('total-vas-qty').textContent = totalVasQty;
+            document.getElementById('total-vas-value').textContent = formatCurrency(totalVasValue);
+
+            const totalAllCategory = totalDeviceValue + totalVasValue;
+            document.getElementById('total-all-category').textContent = formatCurrency(totalAllCategory);
+        }
+
+        function calculateAndGenerate() {
+            calculateTotals();
+            const outputText = generateOutputText();
+            const outputElement = document.getElementById('output');
+            outputElement.value = outputText;
+            outputElement.style.display = 'block';
+        }
+
+        function generateOutputText() {
+            const dateText = document.getElementById('current-date').textContent;
+            const lostDateText = document.getElementById('lost-date').textContent;
+            let output = `*GASSSPOL UPDATE SALES ALL TEAM ERAFONE CISOKA*\n\n`;
+            output += `*${dateText}*\n\n`;
+            output += "QTY / VALUE\n\n";
+
+            document.querySelectorAll('#device-list .item').forEach(item => {
+                const label = item.querySelector('.label').textContent.replace(':', '').trim();
+                const qty = item.querySelector('.qty-input').value;
+                const value = item.querySelector('.value-input').value;
+                const slash = (qty && value) ? ' / ' : '';
+                output += `${label} : ${qty ? qty : ''}${slash}${value ? formatCurrency(value) : ''}\n`;
+            });
+
+            const totalDeviceQtyText = document.getElementById('total-device-qty').textContent;
+            const totalDeviceValueText = document.getElementById('total-device-value').textContent;
+            output += `TOTAL DEVICE : ${totalDeviceQtyText} / ${totalDeviceValueText}\n\n`;
+
+            document.querySelectorAll('#vas-list .item').forEach(item => {
+                const label = item.querySelector('.label').textContent.replace(':', '').trim();
+                const qty = item.querySelector('.qty-input').value;
+                const value = item.querySelector('.value-input').value;
+                const slash = (qty && value) ? ' / ' : '';
+                output += `${label} : ${qty ? qty : ''}${slash}${value ? formatCurrency(value) : ''}\n`;
+            });
+            
+            const totalVasQtyText = document.getElementById('total-vas-qty').textContent;
+            const totalVasValueText = document.getElementById('total-vas-value').textContent;
+            output += `TOTAL VAS : ${totalVasQtyText} / ${totalVasValueText}\n\n`;
+            output += `TOTAL ALL CATEGORY : ${document.getElementById('total-all-category').textContent}\n\n\n`;
+            output += "*LOST STORE*\n\n";
+            output += `${lostDateText}\n`;
+            
+            const rejectQty = document.getElementById('reject-qty').value;
+            const rejectValue = document.getElementById('reject-value').value;
+            output += `REJECT \n QTY : ${rejectQty ? rejectQty : ''} \n VALUE : ${rejectValue ? formatCurrency(rejectValue) : ''}\n\n`;
+
+            const stockKosongQty = document.getElementById('stock-kosong-qty').value;
+            const stockKosongValue = document.getElementById('stock-kosong-value').value;
+            output += `STOCK KOSONG \n QTY : ${stockKosongQty ? stockKosongQty : ''} \n VALUE : ${stockKosongValue ? formatCurrency(stockKosongValue) : ''}\n\n`;
+
+            const lihatQty = document.getElementById('lihat-qty').value;
+            const lihatValue = document.getElementById('lihat-value').value;
+            output += `LIHAT LIHAT/LOSE \n QTY : ${lihatQty ? lihatQty : ''} \n VALUE : ${lihatValue ? formatCurrency(lihatValue) : ''}\n\n\n`;
+            
+            output += "*UPDATE SALES LEASING*\n\n";
+            const akulakuValue = document.getElementById('akulaku-value').value;
+            output += `AKULAKU : ${akulakuValue ? formatCurrency(akulakuValue) : ''}\n`;
+            const kredivoValue = document.getElementById('kredivo-value').value;
+            output += `KREDIVO : ${kredivoValue ? formatCurrency(kredivoValue) : ''}\n`;
+            const shopeepayValue = document.getElementById('shopeepay-value').value;
+            output += `SHOPEEPAY : ${shopeepayValue ? formatCurrency(shopeepayValue) : ''}\n`;
+            const indodanaValue = document.getElementById('indodana-value').value;
+            output += `INDODANA : ${indodanaValue ? formatCurrency(indodanaValue) : ''}\n`;
+            const hciValue = document.getElementById('hci-value').value;
+            output += `HCI : ${hciValue ? formatCurrency(hciValue) : ''}\n`;
+
+            return output;
+        }
+
+        function copyOutput() {
+            const outputElement = document.getElementById('output');
+            if (outputElement.style.display === 'block') {
+                outputElement.select();
+                document.execCommand('copy');
+                alert('Teks berhasil disalin!');
+            } else {
+                alert('Mohon generate output terlebih dahulu!');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDate();
+            createInputFields(deviceData, 'device-list');
+            createInputFields(vasData, 'vas-list');
+
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('input', calculateTotals);
+            });
+            
+            calculateTotals();
+        });
+    </script>
+</body>
+</html>            font-size: 1.2rem;
             font-weight: bold;
         }
         
